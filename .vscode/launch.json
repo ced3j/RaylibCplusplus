@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "w:/Raylib/01_project",
-      "program": "w:/Raylib/01_project/build/Debug/outDebug",
+      "cwd": "w:/Raylib/02_justBall2",
+      "program": "w:/Raylib/02_justBall2/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
