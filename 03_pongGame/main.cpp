@@ -3,6 +3,13 @@
 
 using namespace std;
 
+
+// Score
+int player_score = 0;
+int cpu_score = 0;
+
+
+
 class Ball{
 public:
         float x, y;
@@ -22,9 +29,22 @@ public:
                 speedY *= -1;
             }
 
-            if(x + radius >= GetScreenWidth() || x - radius <= 0){
-                speedX *= -1;
+            if(x + radius >= GetScreenWidth()){
+                cpu_score++;
+                ResetBall();
             }
+            if(x - radius <= 0){
+                player_score++;
+                ResetBall();
+            }
+        }
+        void ResetBall(){
+            x = GetScreenWidth()/2;
+            y = GetScreenHeight()/2;
+
+            int speed_choices[2] = {-1, 1};
+            speedX *= speed_choices[GetRandomValue(0,1)];
+            speedY *= speed_choices[GetRandomValue(0,1)];
         }
 };
 
@@ -125,6 +145,7 @@ int main () {
     SetTargetFPS(60);
 
 
+
     while(WindowShouldClose() == false){
         BeginDrawing();
 
@@ -134,21 +155,26 @@ int main () {
         player.Update();
         cpu.Update(ball.y);
 
+        if(CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{player.x, player.y, player.width, player.height})){
+            ball.speedX *= -1;
+        }
+
+        if(CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{cpu.x, cpu.y, cpu.width, cpu.height})){
+            ball.speedX *= -1;
+        }
+
+
         // Drawing----------
         ClearBackground(BLACK);// We are clearing the background every tour
         // Drawing a line
         DrawLine(screen_width/2, 0, screen_width/2, screen_height, WHITE);
+
         ball.Draw();
-
-
-        // Rectangle(x, y, width, height, color)
-
         player.Draw();
         cpu.Draw();
 
-
-
-
+        DrawText(TextFormat("%i", cpu_score), screen_width/4 - 20, 20, 80, WHITE);
+        DrawText(TextFormat("%i", player_score), 3*screen_width/4 - 20, 20, 80, WHITE);
 
 
         EndDrawing();
